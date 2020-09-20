@@ -28,8 +28,10 @@ async function run(): Promise<void> {
       "ref": varOrUnknown("GITHUB_REF")
     }
 
-    client.trackMetric(datapoints);
-
+    for (var name in datapoints) {
+      const val = datapoints[name]
+      client.trackMetric({ name: name, value: val })
+    }
     client.flush({
       callback: (response: any) => {
         console.debug(`response: ${response}`)
