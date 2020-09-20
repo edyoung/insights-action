@@ -2,10 +2,12 @@ name: 'Edwin Young'
 description: 'Report metrics about build to Application Insights'
 author: 'Edwin Young'
 inputs:
-  milliseconds: # change this
+  aikey:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The Application Insights key'
+  datamap: 
+    required: true
+    description: 'A json string containing the key-value pairs to log, such as {"warnings":"1"; "coverage":"80"}'
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -1,5 +1,6 @@
 import { wait, blah } from '../src/wait'
 import { aitest } from '../src/ai'
+import { promisify } from 'util'
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
@@ -34,9 +35,15 @@ test('blah', async () => {
 })
 
 test('ai2', done => {
-  var client = new appInsights.TelemetryClient();
+  appInsights.setup()
+  var client = appInsights.defaultClient;
 
-  client.trackMetric({ name: "test metric", value: 3 });
+  client.commonProperties = {
+    "foo": "bar",
+    "hello": 2
+  }
+
+  client.trackMetric({ name: "test metric", value: 5 });
 
   client.flush({
     callback: (response: any) => {
@@ -45,3 +52,4 @@ test('ai2', done => {
     }
   });
 })
+

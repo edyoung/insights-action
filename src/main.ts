@@ -1,16 +1,41 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as appInsights from 'applicationinsights'
+
+import { wait } from './wait'
+import { isUndefined } from 'util'
+
+
+function varOrUnknown(name: string): string {
+  var x = process.env[name]
+  if (isUndefined(x)) {
+    x = "Unknown"
+  }
+  return x
+}
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const datamap: string = core.getInput('datamap')
+    core.debug(`Datamap is ${datamap}`)
+    const datapoints = JSON.parse(datamap)
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    appInsights.setup(core.getInput('aikey'))
+    var client = appInsights.defaultClient;
 
-    core.setOutput('time', new Date().toTimeString())
+    client.commonProperties = {
+      "sha": varOrUnknown("GITHUB_SHA"),
+      "repository": varOrUnknown("GITHUB_REPOSITORY"),
+      "ref": varOrUnknown("GITHUB_REF")
+    }
+
+    client.trackMetric(datapoints);
+
+    client.flush({
+      callback: (response: any) => {
+        console.debug(`response: ${response}`)
+      }
+    });
+
   } catch (error) {
     core.setFailed(error.message)
   }
