@@ -1,6 +1,6 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Edwin Young'
+description: 'Report metrics about build to Application Insights'
+author: 'Edwin Young'
 inputs:
   milliseconds: # change this
     required: true

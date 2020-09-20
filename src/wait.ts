@@ -7,3 +7,7 @@ export async function wait(milliseconds: number): Promise<string> {
     setTimeout(() => resolve('done!'), milliseconds)
   })
 }
+
+export async function blah(name: string): Promise<string> {
+  return Promise.resolve(`blah ${name}`)
+}

@@ -1,7 +1,10 @@
-import {wait} from '../src/wait'
+import { wait, blah } from '../src/wait'
+import { aitest } from '../src/ai'
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
+
+let appInsights = require('applicationinsights');
 
 test('throws invalid number', async () => {
   const input = parseInt('foo', 10)
@@ -24,4 +27,21 @@ test('test runs', () => {
     env: process.env
   }
   console.log(cp.execSync(`node ${ip}`, options).toString())
+})
+
+test('blah', async () => {
+  await expect(blah('fish')).resolves.toBe('blah fish')
+})
+
+test('ai2', done => {
+  var client = new appInsights.TelemetryClient();
+
+  client.trackMetric({ name: "test metric", value: 3 });
+
+  client.flush({
+    callback: (response: any) => {
+      console.log(`response: ${response}`)
+      done();
+    }
+  });
 })
