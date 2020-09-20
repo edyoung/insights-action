@@ -59,7 +59,11 @@ function run() {
                 "repository": varOrUnknown("GITHUB_REPOSITORY"),
                 "ref": varOrUnknown("GITHUB_REF")
             };
-            client.trackMetric(datapoints);
+            for (var name in datapoints) {
+                const val = datapoints[name];
+                core.debug(`Name: ${name} Value: ${val}`);
+                client.trackMetric({ name: name, value: val });
+            }
             client.flush({
                 callback: (response) => {
                     console.debug(`response: ${response}`);
