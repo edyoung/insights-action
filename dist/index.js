@@ -62,8 +62,8 @@ function run() {
             for (var name in datapoints) {
                 const val = datapoints[name];
                 core.debug(`Name: ${name} Value: ${val}`);
-                client.trackMetric({ name: name, value: val });
             }
+            client.trackEvent({ name: "Build", measurements: datapoints });
             client.flush({
                 callback: (response) => {
                     console.debug(`response: ${response}`);

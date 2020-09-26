@@ -31,8 +31,8 @@ async function run(): Promise<void> {
     for (var name in datapoints) {
       const val = datapoints[name]
       core.debug(`Name: ${name} Value: ${val}`)
-      client.trackMetric({ name: name, value: val })
     }
+    client.trackEvent({ name: "Build", measurements: datapoints })
     client.flush({
       callback: (response: any) => {
         console.debug(`response: ${response}`)
